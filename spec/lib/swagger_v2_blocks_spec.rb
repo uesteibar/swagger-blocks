@@ -9,30 +9,30 @@ class PetControllerV2
   include Swagger::Blocks
 
   swagger_root host: 'petstore.swagger.wordnik.com' do
-    key :swagger, '2.0'
+    swagger '2.0'
     info version: '1.0.0' do
-      key :title, 'Swagger Petstore'
+      title 'Swagger Petstore'
       key :description, 'A sample API that uses a petstore as an example to ' \
                         'demonstrate features in the swagger-2.0 specification'
       key :termsOfService, 'http://helloreverb.com/terms/'
       contact do
-        key :name, 'Wordnik API Team'
+        name 'Wordnik API Team'
       end
       license do
         key :name, 'MIT'
       end
     end
-    key :basePath, '/api'
+    basePath '/api'
     key :schemes, ['http']
     key :consumes, ['application/json']
     key :produces, ['application/json']
     security_definition :api_key, type: :apiKey do
-      key :name, :api_key
+      name :api_key
       key :in, :header
     end
     security_definition :petstore_auth do
-      key :type, :oauth2
-      key :authorizationUrl, 'http://swagger.io/api/oauth/dialog'
+      type :oauth2
+      authorizationUrl 'http://swagger.io/api/oauth/dialog'
       key :flow, :implicit
       scopes 'write:pets' => 'modify pets in your account' do
         key 'read:pets', 'read your pets'
@@ -42,13 +42,13 @@ class PetControllerV2
       key :url, 'https://swagger.io'
     end
     tag name: 'pet' do
-      key :description, 'Pets operations'
+      description 'Pets operations'
       externalDocs description: 'Find more info here' do
-        key :url, 'https://swagger.io'
+        url 'https://swagger.io'
       end
     end
     parameter :species do
-      key :name, :species
+      name :species
       key :in, :body
       key :description, 'Species of this pet'
       key :type, :string
@@ -57,7 +57,7 @@ class PetControllerV2
 
   swagger_path '/pets' do
     operation :get do
-      key :description, 'Returns all pets from the system that the user has access to'
+      description 'Returns all pets from the system that the user has access to'
       key :operationId, 'findPets'
       key :produces, [
         'application/json',
@@ -66,7 +66,7 @@ class PetControllerV2
         'text/html',
       ]
       parameter do
-        key :name, :tags
+        name :tags
         key :in, :query
         key :description, 'tags to filter by'
         key :required, false
@@ -85,7 +85,7 @@ class PetControllerV2
         key :format, :int32
       end
       response 200 do
-        key :description, 'pet response'
+        description 'pet response'
         schema type: :array do
           items do
             key :'$ref', :Pet
@@ -100,7 +100,7 @@ class PetControllerV2
       end
     end
     operation :post do
-      key :description, 'Creates a new pet in the store.  Duplicates are allowed'
+      description 'Creates a new pet in the store.  Duplicates are allowed'
       key :operationId, 'addPet'
       key :produces, [
         'application/json'
@@ -238,9 +238,9 @@ class PetV2
         key :'$ref', :Pet
       end
       schema do
-        key :required, [:name]
+        required [:name]
         property :id do
-          key :type, :integer
+          type :integer
           key :format, :int64
         end
         property :name do

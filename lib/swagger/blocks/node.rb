@@ -1,14 +1,17 @@
+require "pry"
 module Swagger
   module Blocks
     # Base node for representing every object in the Swagger DSL.
     class Node
-      attr_accessor :name
-      attr_writer :version
+      attr_writer :name, :version
+
+      def initialize(name: nil)
+        @name = name
+      end
 
       def self.call(options = {}, &block)
         # Create a new instance and evaluate the block into it.
-        instance = new
-        instance.name = options[:name] if options[:name]
+        instance = new(name: options[:name])
         instance.version = options[:version]
         instance.keys options[:inline_keys]
         instance.instance_eval(&block) if block
@@ -33,9 +36,9 @@ module Swagger
             result[key] = value
           end
         end
-        return result if !name
+        return result if !@name
         # If 'name' is given to this node, wrap the data with a root element with the given name.
-        {name => result}
+        {@name => result}
       end
 
       def data
@@ -48,6 +51,12 @@ module Swagger
 
       def key(key, value)
         self.data[key] = value
+      end
+
+      def method_missing(key, *args)
+        return if args.empty?
+
+        key(key, *args)
       end
 
       def version
